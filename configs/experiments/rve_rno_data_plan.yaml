@@ -1,0 +1,241 @@
+schema_version: "3.0"
+output_directory: results/rve_rno_data
+parallel:
+  workers: 2
+  paths_per_task: 1
+  shard_path_count: 64
+  compression: lzf
+  thread_count_per_worker: 1
+audit:
+  q_tolerance: 1.0e-12
+  plastic_q_threshold: 1.0e-8
+  dissipation_tolerance: 1.0e-12
+  positive_cumulative_dissipation_threshold: 1.0e-12
+  work_tolerance: 1.0e-12
+  stress_drop_threshold: 1.0e-10
+  strain_increment_tolerance: 1.0e-14
+  hold_strain_tolerance: 1.0e-14
+  hold_stress_relaxation_threshold: 1.0e-10
+  tangent_perturbation: 1.0e-7
+  tangent_stress_scale: 10.0
+  tangent_direction_tolerance: 1.0e-5
+sources:
+  - name: j2_material_point_paths
+    kind: material_point
+    model: homogeneous_j2_viscoplastic_material_point
+    boundary:
+      kind: none
+      description: No spatial boundary; prescribe the complete six-component strain history.
+    load_cases:
+      - name: proportional_and_cyclic_paths
+        path_count: 512
+        time_points: 256
+        duration: 0.02
+        excitation: prescribed_six_component_strain
+        seed: 11000
+        peak_scale: 0.05
+        path_families: [monotonic, load_unload_reload, reverse, hold, nonproportional]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: false
+          require_reverse_loading: false
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: [plastic_strain, equivalent_plastic_strain, viscoplastic_multiplier]
+      diagnostics: [trial_yield_value, yield_activation_margin, local_residual, local_iterations]
+    training_role: pretraining
+    macro_path_origin: prescribed_macro_strain
+    material_parameters:
+      young_modulus: {kind: fixed, value: 3339.9160679991464}
+      poisson_ratio: {kind: fixed, value: 0.36994096308414537}
+      yield_stress: {kind: fixed, value: 10.0}
+      hardening_modulus: {kind: fixed, value: 80.0}
+      time_scale: {kind: fixed, value: 0.02}
+    microstructure_parameters: {}
+  - name: homogeneous_periodic_rve_paths
+    kind: single_phase_rve
+    model: periodic_hex8_single_phase_j2_viscoplastic_rve
+    boundary:
+      kind: periodic_macro_strain
+      description: Exact periodic fluctuation constraint with prescribed macroscopic strain.
+    load_cases:
+      - name: nonproportional_six_component_paths
+        path_count: 512
+        time_points: 256
+        duration: 0.02
+        excitation: cyclic_nonproportional_strain
+        seed: 21000
+        peak_scale: 0.05
+        path_families: [monotonic, load_unload_reload, reverse, hold, nonproportional]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: false
+          require_reverse_loading: false
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: [plastic_strain, equivalent_plastic_strain, viscoplastic_multiplier]
+      diagnostics: [hill_mandel_error, periodic_fluctuation_error, micro_residual_norm]
+    training_role: homogenization
+    macro_path_origin: prescribed_macro_strain
+    material_parameters:
+      young_modulus: {kind: fixed, value: 3339.9160679991464}
+      poisson_ratio: {kind: fixed, value: 0.36994096308414537}
+      yield_stress: {kind: fixed, value: 10.0}
+      hardening_modulus: {kind: fixed, value: 80.0}
+      time_scale: {kind: fixed, value: 0.02}
+    microstructure_parameters: {}
+  - name: cylindrical_inclusion_rve_paths
+    kind: heterogeneous_rve
+    model: periodic_conforming_ogrid_j2_matrix_elastic_inclusion_rve
+    boundary:
+      kind: periodic_macro_strain
+      description: Exact periodic boundary with perfect matrix-inclusion displacement continuity.
+    load_cases:
+      - name: contrast_and_nonproportional_paths
+        path_count: 2048
+        time_points: 256
+        duration: 0.02
+        excitation: cyclic_nonproportional_strain
+        seed: 31000
+        peak_scale: 0.05
+        path_families: [monotonic, load_unload_reload, reverse, hold, nonproportional]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: false
+          require_reverse_loading: false
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: [phase_matrix__plastic_strain, phase_matrix__equivalent_plastic_strain]
+      diagnostics: [phase_average_stress, phase_volume_fraction, hill_mandel_error]
+    training_role: coverage
+    macro_path_origin: prescribed_macro_strain
+    material_parameters:
+      matrix_young_modulus: {kind: fixed, value: 1000.0}
+      matrix_yield_stress: {kind: fixed, value: 10.0}
+      matrix_time_scale: {kind: fixed, value: 0.02}
+      inclusion_young_modulus: {kind: fixed, value: 6666.666666666667}
+    microstructure_parameters:
+      inclusion_volume_fraction: {kind: fixed, value: 0.05}
+      circumferential_divisions: {kind: fixed, value: 64.0}
+  - name: impact_extracted_rve_paths
+    kind: impact_path
+    model: macro_hex8_bar_with_periodic_heterogeneous_rve_replay
+    boundary:
+      kind: macro_impact_structure
+      description: Fix the left face, apply a half-sine pressure pulse on the right face, and leave lateral faces traction-free.
+    load_cases:
+      - &j2_impact_base
+        name: pressure_pulse_moderate
+        path_count: 80
+        time_points: 512
+        duration: 0.004
+        excitation: half_sine_pressure_pulse
+        seed: 41000
+        peak_scale: 20.0
+        pulse_duration_fraction: 0.25
+        axial_region_count: 8
+        path_families: [monotonic]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: true
+          require_reverse_loading: false
+      - <<: *j2_impact_base
+        name: pressure_pulse_high
+        path_count: 88
+        seed: 41100
+        peak_scale: 30.0
+      - <<: *j2_impact_base
+        name: pressure_pulse_very_high
+        path_count: 88
+        seed: 41200
+        peak_scale: 40.0
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: [phase_matrix__plastic_strain, phase_matrix__equivalent_plastic_strain]
+      diagnostics: [hill_mandel_error, incremental_work_density, viscoplastic_active]
+    training_role: validation
+    macro_path_origin: direct_j2_explicit
+    material_parameters:
+      matrix_young_modulus: {kind: fixed, value: 1000.0}
+      matrix_yield_stress: {kind: fixed, value: 10.0}
+      matrix_time_scale: {kind: fixed, value: 0.02}
+      inclusion_young_modulus: {kind: fixed, value: 6666.666666666667}
+    microstructure_parameters:
+      inclusion_volume_fraction: {kind: fixed, value: 0.05}
+      circumferential_divisions: {kind: fixed, value: 64.0}
+  - name: direct_fe2_calibration_paths
+    kind: impact_path
+    model: macro_hex8_bar_with_direct_periodic_heterogeneous_fe2
+    boundary:
+      kind: macro_impact_structure
+      description: Direct FE2 pressure impact used only for validation and test coverage.
+    load_cases:
+      - &fe2_elastic_base
+        name: elastic_fe2_low
+        path_count: 8
+        time_points: 512
+        duration: 0.004
+        excitation: half_sine_pressure_pulse
+        seed: 42000
+        peak_scale: 3.0
+        pulse_duration_fraction: 0.25
+        axial_region_count: 8
+        path_families: [monotonic]
+        expected_response:
+          regime: elastic
+          require_unloading: true
+          require_reverse_loading: false
+      - <<: *fe2_elastic_base
+        name: elastic_fe2_medium
+        path_count: 8
+        seed: 42100
+        peak_scale: 4.0
+      - <<: *fe2_elastic_base
+        name: elastic_fe2_high
+        path_count: 16
+        seed: 42200
+        peak_scale: 5.0
+      - &fe2_viscoplastic_base
+        name: viscoplastic_fe2_moderate
+        path_count: 8
+        time_points: 512
+        duration: 0.004
+        excitation: half_sine_pressure_pulse
+        seed: 42300
+        peak_scale: 20.0
+        pulse_duration_fraction: 0.25
+        axial_region_count: 8
+        path_families: [monotonic]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: true
+          require_reverse_loading: false
+      - <<: *fe2_viscoplastic_base
+        name: viscoplastic_fe2_high
+        path_count: 8
+        seed: 42400
+        peak_scale: 30.0
+      - <<: *fe2_viscoplastic_base
+        name: viscoplastic_fe2_very_high
+        path_count: 16
+        seed: 42500
+        peak_scale: 40.0
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: [phase_matrix__plastic_strain, phase_matrix__equivalent_plastic_strain]
+      diagnostics: [hill_mandel_error, incremental_work_density, viscoplastic_active]
+    training_role: validation
+    macro_path_origin: direct_fe2_explicit
+    material_parameters:
+      matrix_young_modulus: {kind: fixed, value: 1000.0}
+      matrix_yield_stress: {kind: fixed, value: 10.0}
+      matrix_time_scale: {kind: fixed, value: 0.02}
+      inclusion_young_modulus: {kind: fixed, value: 6666.666666666667}
+    microstructure_parameters:
+      inclusion_volume_fraction: {kind: fixed, value: 0.05}
+      circumferential_divisions: {kind: fixed, value: 16.0}

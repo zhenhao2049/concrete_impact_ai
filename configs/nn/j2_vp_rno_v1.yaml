@@ -1,0 +1,9 @@
+model:
+  family: j2_vp_rno
+  time_representation: continuous
+  hidden_size: 32
+  hidden_layers: 2
+  activation: tanh
+  correction_scale: 1.0
+  dtype: float64
+  device: cpu

@@ -1,0 +1,38 @@
+schema_version: "1.0"
+data_plan: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/frozen_data_plan.json
+response_shard_manifest: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/response_shards.json
+subset_manifest: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/subset_manifest.json
+output_directory: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/acceptance
+split:
+  seed: 71000
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+coverage:
+  strain_norm: [0.0, 3.0e-4, 1.0e-3, 5.0e-3, 1.5e-2, 3.0e-2, 5.0e-2]
+  strain_rate_norm: [0.0, 0.1, 1.0, 5.0, 20.0, 40.0]
+  equivalent_stress: [0.0, 2.0, 5.0, 10.0, 20.0, 40.0, 60.0]
+  yield_activation_margin: [-2.0, -0.5, 0.0, 0.05, 0.5, 5.0]
+  triaxiality: [-100.0, -1.0, -0.33, 0.33, 1.0, 100.0]
+  lode_invariant: [-1.0, -0.5, 0.0, 0.5, 1.0]
+  turning_angle: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.141592653589793]
+  equivalent_plastic_strain: [0.0, 1.0e-8, 1.0e-5, 1.0e-3, 1.0e-2, 1.0e-1]
+  stress_floor: 1.0e-10
+  increment_floor: 1.0e-14
+  invariant_domain_tolerance: 1.0e-10
+coverage_policy:
+  mode: pilot
+  allowed_missing_bin_indices:
+    equivalent_stress: [5]
+    triaxiality: [1, 3]
+    turning_angle: [1, 2, 3, 4]
+    yield_activation_margin: [4]
+  limitation_note: >-
+    This Pilot is restricted to the selected hold and load-unload-reload strata.
+    It does not certify monotonic, reverse, nonproportional, or full joint-state coverage.
+thresholds:
+  fe2_out_of_coverage_fraction: 0.05
+  tangent_direction_error: 1.0e-5
+external_checks:
+  single_phase_degeneracy_report: null
+  rve_mesh_selection_report: results/benchmarks/rve/rve_rno_fixed_cell_mesh/rve_mesh_selection.json

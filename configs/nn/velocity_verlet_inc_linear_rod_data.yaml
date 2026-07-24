@@ -1,0 +1,71 @@
+schema_version: "1.0"
+model:
+  name: velocity_verlet_inc_linear_rod
+  dimension: 2
+  geometry:
+    type: rectangle
+    origin: [0.0, 0.0]
+    size: [1.0, 0.05]
+  mesh:
+    generator: gmsh
+    element_type: quad4
+    divisions: [40, 1]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+plane_state: plane_stress
+thickness: 0.02
+time_step: 5.0e-6
+num_steps: 120
+cfl_safety_factor: 0.8
+fine_ratio: 8
+verification_ratio: 16
+pressure_boundary: right
+arrival_coordinate: 0.75
+arrival_threshold: 0.05
+displacement_reference_tolerance: 5.0e-3
+velocity_reference_tolerance: 5.0e-3
+arrival_reference_tolerance: 2.0e-2
+energy_reference_tolerance: 5.0e-3
+controls:
+  - {path_id: train_a050_t040, split: train, pressure_amplitude: 5.0e5, pulse_duration: 4.0e-5}
+  - {path_id: train_a050_t060, split: train, pressure_amplitude: 5.0e5, pulse_duration: 6.0e-5}
+  - {path_id: train_a050_t080, split: train, pressure_amplitude: 5.0e5, pulse_duration: 8.0e-5}
+  - {path_id: train_a050_t100, split: train, pressure_amplitude: 5.0e5, pulse_duration: 1.0e-4}
+  - {path_id: train_a075_t040, split: train, pressure_amplitude: 7.5e5, pulse_duration: 4.0e-5}
+  - {path_id: train_a075_t060, split: train, pressure_amplitude: 7.5e5, pulse_duration: 6.0e-5}
+  - {path_id: train_a075_t080, split: train, pressure_amplitude: 7.5e5, pulse_duration: 8.0e-5}
+  - {path_id: train_a075_t100, split: train, pressure_amplitude: 7.5e5, pulse_duration: 1.0e-4}
+  - {path_id: train_a100_t040, split: train, pressure_amplitude: 1.0e6, pulse_duration: 4.0e-5}
+  - {path_id: train_a100_t060, split: train, pressure_amplitude: 1.0e6, pulse_duration: 6.0e-5}
+  - {path_id: train_a100_t080, split: train, pressure_amplitude: 1.0e6, pulse_duration: 8.0e-5}
+  - {path_id: train_a100_t100, split: train, pressure_amplitude: 1.0e6, pulse_duration: 1.0e-4}
+  - {path_id: train_a125_t040, split: train, pressure_amplitude: 1.25e6, pulse_duration: 4.0e-5}
+  - {path_id: train_a125_t060, split: train, pressure_amplitude: 1.25e6, pulse_duration: 6.0e-5}
+  - {path_id: train_a125_t080, split: train, pressure_amplitude: 1.25e6, pulse_duration: 8.0e-5}
+  - {path_id: train_a125_t100, split: train, pressure_amplitude: 1.25e6, pulse_duration: 1.0e-4}
+  - {path_id: train_a150_t040, split: train, pressure_amplitude: 1.5e6, pulse_duration: 4.0e-5}
+  - {path_id: train_a150_t060, split: train, pressure_amplitude: 1.5e6, pulse_duration: 6.0e-5}
+  - {path_id: train_a150_t080, split: train, pressure_amplitude: 1.5e6, pulse_duration: 8.0e-5}
+  - {path_id: train_a150_t100, split: train, pressure_amplitude: 1.5e6, pulse_duration: 1.0e-4}
+  - {path_id: validation_a0625_t050, split: validation, pressure_amplitude: 6.25e5, pulse_duration: 5.0e-5}
+  - {path_id: validation_a0625_t090, split: validation, pressure_amplitude: 6.25e5, pulse_duration: 9.0e-5}
+  - {path_id: validation_a1375_t050, split: validation, pressure_amplitude: 1.375e6, pulse_duration: 5.0e-5}
+  - {path_id: validation_a1375_t090, split: validation, pressure_amplitude: 1.375e6, pulse_duration: 9.0e-5}
+  - {path_id: test_a0875_t050, split: test, pressure_amplitude: 8.75e5, pulse_duration: 5.0e-5}
+  - {path_id: test_a0875_t070, split: test, pressure_amplitude: 8.75e5, pulse_duration: 7.0e-5}
+  - {path_id: test_a0875_t090, split: test, pressure_amplitude: 8.75e5, pulse_duration: 9.0e-5}
+  - {path_id: test_a1125_t050, split: test, pressure_amplitude: 1.125e6, pulse_duration: 5.0e-5}
+  - {path_id: test_a1125_t070, split: test, pressure_amplitude: 1.125e6, pulse_duration: 7.0e-5}
+  - {path_id: test_a1125_t090, split: test, pressure_amplitude: 1.125e6, pulse_duration: 9.0e-5}
+output_path: data/inc/velocity_verlet_linear_rod_v1.h5

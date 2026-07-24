@@ -1,0 +1,61 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Raw numerical data and transfer payloads
+results/**
+!results/README.md
+results/tmp/
+data/raw/
+data/generated/
+results/**/*.h5
+results/**/*.hdf5
+results/**/*.partial
+results/**/*.npz
+results/**/*.npy
+results/**/*.xdmf
+results/**/*.msh
+results/**/*.vtu
+results/**/*.vtk
+results/**/*.pvtu
+results/**/*.pvd
+results/**/*.zip
+results/**/scratch/
+results/**/checkpoints/
+results/**/checkpoint_*.pt
+results/**/last_model.pt
+results/**/*.pth
+results/**/*.ckpt
+results/rve_rno_training/
+results/rve_stage0_c48/
+results/transfers/
+
+# Public evidence data are limited to metadata and one committed sample.
+data/rve_rno_c48_v2_2000/sample/*.h5
+!data/rve_rno_c48_v2_2000/sample/response.h5
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.agents/
+.codex/
+.vscode/

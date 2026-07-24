@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "concrete-impact"
+version = "0.1.0"
+description = "PF-CZM based concrete impact fracture simulation and physics-constrained neural acceleration."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Zhen Hao" }
+]
+dependencies = [
+  "numpy",
+  "scipy",
+  "pandas",
+  "matplotlib",
+  "h5py",
+  "pyyaml",
+  "pydantic>=2,<3",
+  "typer",
+  "rich",
+  "tqdm",
+  "meshio",
+  "gmsh",
+  "threadpoolctl"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "ruff",
+  "mypy"
+]
+ml = [
+  "torch>=2.3,<3"
+]
+petsc = [
+  "mpi4py",
+  "petsc4py",
+  "slepc4py"
+]
+
+[project.scripts]
+concrete-impact-env = "concrete_impact.cli.inspect_env:main"
+concrete-impact-run = "concrete_impact.cli.run_benchmark:main"
+concrete-impact-case = "concrete_impact.cli.run_case:main"
+concrete-impact-train = "concrete_impact.cli.train_pf_rno:main"
+concrete-impact-generate-rve-data = "concrete_impact.cli.generate_rve_data:main"
+concrete-impact-inspect-rve-data = "concrete_impact.cli.inspect_rve_data:main"
+concrete-impact-profile-rve = "concrete_impact.experiments.rve_execution_performance:main"
+concrete-impact-validate-rno-training-data = "concrete_impact.cli.validate_rno_training_data:main"
+concrete-impact-run-background = "concrete_impact.cli.run_background:main"
+concrete-impact-validate-fe2-preflight = "concrete_impact.cli.validate_fe2_preflight_coverage:main"
+concrete-impact-train-j2-vp-rno = "concrete_impact.cli.train_j2_vp_rno:main"
+concrete-impact-train-rve-rno = "concrete_impact.cli.train_rve_rno:main"
+concrete-impact-smoke-rve-rno = "concrete_impact.cli.smoke_rve_rno:main"
+concrete-impact-compare-rve-rno = "concrete_impact.cli.compare_rve_rno:main"
+concrete-impact-evaluate-rve-rno = "concrete_impact.cli.evaluate_rve_rno:main"
+concrete-impact-analyze-rve-rno-s0 = "concrete_impact.cli.analyze_rve_rno_s0:main"
+concrete-impact-generate-inc-data = "concrete_impact.cli.generate_inc_data:main"
+concrete-impact-train-inc = "concrete_impact.cli.train_velocity_verlet_inc:main"
+concrete-impact-validate-rve-rno-artifact = "concrete_impact.cli.validate_rve_rno_artifact:main"
+concrete-impact-export-rve-snapshots = "concrete_impact.cli.export_rve_snapshots:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["concrete_impact"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

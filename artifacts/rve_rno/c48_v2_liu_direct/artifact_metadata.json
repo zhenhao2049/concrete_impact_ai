@@ -1,0 +1,99 @@
+{
+  "schema_version": "2.0",
+  "model_family": "energy_rve_rno",
+  "integrator": "current_state_stress_forward_euler",
+  "evolution": "direct_rate",
+  "voigt_order": [
+    "xx",
+    "yy",
+    "zz",
+    "yz",
+    "xz",
+    "xy"
+  ],
+  "strain_convention": "engineering_shear",
+  "stress_components": [
+    "xx",
+    "yy",
+    "zz",
+    "yz",
+    "xz",
+    "xy"
+  ],
+  "latent_dimension": 6,
+  "hidden_size": 128,
+  "hidden_layers": 4,
+  "activation": "silu",
+  "time_representation": "continuous",
+  "reference_time_scale": 0.02,
+  "time_step_role": "nondimensional_forward_euler_increment",
+  "deployment_integrator": "explicit_only",
+  "accepted_time_step_range": [
+    1.2109374999999913e-7,
+    0.020955882352941213
+  ],
+  "dtype": "float32",
+  "normalization": {
+    "dissipation_density": {
+      "mean": [
+        8.675348460701288
+      ],
+      "rms_scale": [
+        34.99784044438109
+      ]
+    },
+    "macro_strain": {
+      "mean": [
+        0.0015550143954644066,
+        -0.00012734476847977663,
+        -0.0015799675213604993,
+        0.0024672931293495785,
+        0.0004633835997877308,
+        -0.00002959183245912005
+      ],
+      "rms_scale": [
+        0.010713845930733129,
+        0.004880605090699788,
+        0.005910807868069253,
+        0.008245582956189134,
+        0.002436314705512075,
+        0.0014122165812551503
+      ]
+    },
+    "macro_stress": {
+      "mean": [
+        0.74020932443438,
+        -0.14093895320242517,
+        -1.276016669641219,
+        0.6285462326503973,
+        0.10663234377120209,
+        -0.0049738131298347026
+      ],
+      "rms_scale": [
+        12.09234645103896,
+        8.873379984151748,
+        10.0132948388862,
+        1.7958222672739805,
+        0.6233042580470691,
+        0.44930754435976555
+      ]
+    }
+  },
+  "capabilities": {
+    "stress": true,
+    "dissipation": true,
+    "free_energy": true,
+    "algorithmic_tangent": true,
+    "thermodynamic_constraint_exact": false,
+    "microscopic_peak_stress": false,
+    "parameterized_microstructure": false,
+    "dynamic_rve": false
+  },
+  "data_plan_sha256": "c76afeebc355431f5d704ec3125b9888fa440b3021da6a2bb4e279aea0ce8963",
+  "response_shard_manifest_sha256": "eacb88237cc7df327de678a16e5a77f70ee51ee14215a929d1dde03e4a2cd7b8",
+  "split_manifest_sha256": "921acbb9871da0a92ac19ecd6334412d903598f414c8a1a886328bd9a1bf930d",
+  "normalization_sha256": "2a487639362336275671f05c56ea495407255e207276b8f95fe0c5754ff1c641",
+  "mesh_quality": "c48_passed_fixed_cell_acceptance",
+  "acceptance_scope": "strict",
+  "acceptance_limitation_note": null
+}

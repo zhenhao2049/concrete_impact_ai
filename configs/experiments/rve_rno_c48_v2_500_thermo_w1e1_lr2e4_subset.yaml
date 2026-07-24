@@ -1,0 +1,43 @@
+schema_version: "1.0"
+source_manifest: results/rve_rno_training/rve_rno_c48_v2_2000/manifest.json
+source_manifest_sha256: 91032ce287454bbfdfe115e4a47a98e5db41b6711844921f0d4db5f4d888ab96
+source_data_root: results/rve_rno_training/rve_rno_c48_v2_2000
+output_directory: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data
+selected_design_strata:
+  - hold|A1|R1
+  - hold|A1|R2
+  - hold|A1|R3
+  - hold|A1|R4
+  - hold|A2|R1
+  - hold|A2|R2
+  - hold|A2|R3
+  - hold|A2|R4
+  - hold|A3|R1
+  - hold|A3|R2
+  - hold|A3|R3
+  - hold|A3|R4
+  - hold|A4|R1
+  - hold|A4|R2
+  - hold|A4|R3
+  - hold|A4|R4
+  - hold|A5|R1
+  - hold|A5|R2
+  - hold|A5|R3
+  - hold|A5|R4
+  - load_unload_reload|A1|R1
+  - load_unload_reload|A1|R2
+  - load_unload_reload|A1|R3
+  - load_unload_reload|A1|R4
+  - load_unload_reload|A2|R1
+expected:
+  stratum_count: 25
+  paths_per_stratum: 20
+  path_count: 500
+  split_counts:
+    train: 350
+    validation: 75
+    test: 75
+  per_stratum_split_counts:
+    train: 14
+    validation: 3
+    test: 3

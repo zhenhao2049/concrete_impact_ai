@@ -1,0 +1,91 @@
+case:
+  name: rve_rno_fixed_cell_mesh_acceptance
+  description: Fixed-cell c32/c48/c64 heterogeneous RVE mesh acceptance.
+reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+selection_policy: fixed_cell_c32_c48_c64
+mesh_levels:
+  - name: c32_r4_z4
+    circumferential_divisions: 32
+    matrix_radial_divisions: 4
+    axial_divisions: 4
+    reference: false
+  - name: c48_r6_z6
+    circumferential_divisions: 48
+    matrix_radial_divisions: 6
+    axial_divisions: 6
+    reference: false
+  - name: c64_r8_z8
+    circumferential_divisions: 64
+    matrix_radial_divisions: 8
+    axial_divisions: 8
+    reference: true
+path:
+  time_step: 1.0e-3
+  time_points: 6
+  families:
+    - name: volumetric
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.002, 0.002, 0.002, 0.0, 0.0, 0.0]
+        - [0.004, 0.004, 0.004, 0.0, 0.0, 0.0]
+        - [0.006, 0.006, 0.006, 0.0, 0.0, 0.0]
+        - [0.004, 0.004, 0.004, 0.0, 0.0, 0.0]
+        - [0.002, 0.002, 0.002, 0.0, 0.0, 0.0]
+    - name: uniaxial
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.005, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.020, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.005, 0.0, 0.0, 0.0, 0.0, 0.0]
+    - name: load_unload_reload
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.002, 0.0, 0.0, 0.005]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.010]
+        - [0.008, -0.001, -0.001, 0.0, 0.0, 0.002]
+        - [0.020, -0.004, -0.004, 0.0, 0.0, 0.008]
+        - [0.030, -0.006, -0.006, 0.0, 0.0, 0.012]
+    - name: reverse
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.015]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.030]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.000]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, -0.020]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, -0.030]
+    - name: hold
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.002, 0.0, 0.0, 0.010]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+    - name: nonproportional
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.001, 0.005, 0.000, 0.000]
+        - [0.015, -0.004, -0.002, 0.000, 0.008, 0.002]
+        - [0.008, 0.002, -0.005, -0.006, 0.004, 0.010]
+        - [0.020, -0.006, 0.001, 0.004, -0.008, -0.010]
+        - [0.025, -0.008, -0.002, -0.002, 0.010, 0.015]
+verification:
+  macro_stress_tolerance: 1.0e-2
+  tangent_tolerance: 2.0e-2
+  dissipation_tolerance: 2.0e-2
+  phase_average_stress_tolerance: 5.0e-2
+  macro_tolerance: 2.0e-2
+  micro_tolerance: 5.0e-2
+  hill_mandel_tolerance: 1.0e-9
+  reaction_tolerance: 1.0e-10
+  periodic_tolerance: 1.0e-12
+  tangent_direction_tolerance: 1.0e-5
+  tangent_perturbation: 1.0e-7
+  stress_scale: 10.0
+  tangent_scale: 1000.0
+  dissipation_scale: 1.0
+  q_scale: 1.0e-1
+output:
+  root: results/benchmarks/rve/rve_rno_fixed_cell_mesh

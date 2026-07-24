@@ -1,0 +1,106 @@
+case:
+  name: heterogeneous_rve_mesh_convergence
+  description: Six-path nonlinear convergence of the two-phase cylindrical O-grid RVE.
+reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+mesh_levels:
+  - name: c16_r1
+    circumferential_divisions: 16
+    matrix_radial_divisions: 1
+    axial_divisions: 1
+    reference: false
+  - name: c16_r2
+    circumferential_divisions: 16
+    matrix_radial_divisions: 2
+    axial_divisions: 1
+    reference: false
+  - name: c32_r2
+    circumferential_divisions: 32
+    matrix_radial_divisions: 2
+    axial_divisions: 1
+    reference: false
+  - name: c64_r2
+    circumferential_divisions: 64
+    matrix_radial_divisions: 2
+    axial_divisions: 1
+    reference: false
+  - name: c64_r3
+    circumferential_divisions: 64
+    matrix_radial_divisions: 3
+    axial_divisions: 1
+    reference: false
+  - name: c128_r2
+    circumferential_divisions: 128
+    matrix_radial_divisions: 2
+    axial_divisions: 1
+    reference: false
+  - name: c128_r3
+    circumferential_divisions: 128
+    matrix_radial_divisions: 3
+    axial_divisions: 1
+    reference: true
+path:
+  time_step: 1.0e-3
+  time_points: 6
+  families:
+    - name: volumetric
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.002, 0.002, 0.002, 0.0, 0.0, 0.0]
+        - [0.004, 0.004, 0.004, 0.0, 0.0, 0.0]
+        - [0.006, 0.006, 0.006, 0.0, 0.0, 0.0]
+        - [0.004, 0.004, 0.004, 0.0, 0.0, 0.0]
+        - [0.002, 0.002, 0.002, 0.0, 0.0, 0.0]
+    - name: uniaxial
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.005, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.020, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.005, 0.0, 0.0, 0.0, 0.0, 0.0]
+    - name: load_unload_reload
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.002, 0.0, 0.0, 0.005]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.010]
+        - [0.008, -0.001, -0.001, 0.0, 0.0, 0.002]
+        - [0.020, -0.004, -0.004, 0.0, 0.0, 0.008]
+        - [0.030, -0.006, -0.006, 0.0, 0.0, 0.012]
+    - name: reverse_shear
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.015]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.030]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.000]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, -0.020]
+        - [0.0, 0.0, 0.0, 0.0, 0.0, -0.030]
+    - name: hold_relaxation
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.002, 0.0, 0.0, 0.010]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+        - [0.025, -0.005, -0.005, 0.0, 0.0, 0.020]
+    - name: nonproportional
+      macro_strains:
+        - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        - [0.010, -0.002, -0.001, 0.005, 0.000, 0.000]
+        - [0.015, -0.004, -0.002, 0.000, 0.008, 0.002]
+        - [0.008, 0.002, -0.005, -0.006, 0.004, 0.010]
+        - [0.020, -0.006, 0.001, 0.004, -0.008, -0.010]
+        - [0.025, -0.008, -0.002, -0.002, 0.010, 0.015]
+verification:
+  macro_tolerance: 2.0e-2
+  micro_tolerance: 5.0e-2
+  hill_mandel_tolerance: 1.0e-9
+  reaction_tolerance: 1.0e-10
+  periodic_tolerance: 1.0e-12
+  tangent_direction_tolerance: 1.0e-5
+  tangent_perturbation: 1.0e-7
+  stress_scale: 10.0
+  tangent_scale: 1000.0
+  dissipation_scale: 1.0
+  q_scale: 1.0e-1
+output:
+  root: results/benchmarks/rve/heterogeneous_mesh_convergence

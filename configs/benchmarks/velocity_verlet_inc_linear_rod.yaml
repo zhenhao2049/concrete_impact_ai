@@ -1,0 +1,17 @@
+case:
+  name: velocity_verlet_inc_linear_rod
+  description: Fixed-mesh two-stage INC validation on a held-out linear-rod pressure pulse.
+data_config: configs/nn/velocity_verlet_inc_linear_rod_data.yaml
+dataset_path: data/inc/velocity_verlet_linear_rod_v1.h5
+path_id: test_a0875_t070
+artifact:
+  model_path: results/velocity_verlet_inc_training/linear_rod_v1/best_model.pt
+  metadata_path: results/velocity_verlet_inc_training/linear_rod_v1/artifact_metadata.json
+acceptance:
+  oracle_error: 1.0e-11
+  label_nrmse: 0.20
+  state_error_ratio: 0.70
+  energy_error_ratio: 0.80
+  impulse_balance_error: 1.0e-11
+output:
+  root: results/benchmarks/velocity_verlet_inc_linear_rod

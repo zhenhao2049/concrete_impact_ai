@@ -1,0 +1,40 @@
+case:
+  name: plastic_dp_pure_shear
+  description: Drucker-Prager pure-shear benchmark with non-associated volumetric plastic flow.
+model:
+  material:
+    type: drucker_prager
+    name: concrete_dp_pure_shear_benchmark
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.20
+    friction_parameter: 0.0
+    cohesion: 3.0e6
+    flow_parameter: 0.20
+    cohesion_hardening: 0.0
+    kappa_rate: 1.0
+analysis:
+  time_step: 1.0
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+benchmark:
+  type: dp_pure_shear
+  num_steps: 121
+  max_shear_strain: 5.0e-4
+  need_tangent: true
+  x_name: shear_strain
+  plot_pairs:
+    - numerical: shear_stress_numerical
+      exact: shear_stress_exact
+    - numerical: pressure_numerical
+      exact: pressure_exact
+    - numerical: plastic_volumetric_strain_numerical
+      exact: plastic_volumetric_strain_exact
+verification:
+  relative_tolerance: 1.0e-10
+  absolute_tolerance: 1.0e-3
+output:
+  root: results/benchmarks/plasticity/plastic_dp_pure_shear

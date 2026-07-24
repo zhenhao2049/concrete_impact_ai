@@ -1,0 +1,30 @@
+schema_version: "1.0"
+certification_scope: pilot
+run_directory: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/training/run_20260718_105720
+response_shard_manifest: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/response_shards.json
+split_manifest: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/acceptance/split_manifest.json
+subset_manifest: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/subset_manifest.json
+subset_summary: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/data/subset_summary.json
+output_directory: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/evaluation_final
+reference_thresholds_config: configs/nn/rve_rno_c48_v2_direct_artifact_acceptance.yaml
+device: cuda
+evaluation_batch_size: 64
+tangent:
+  path_count: 10
+  states_per_path: 4
+  perturbation: 1.0e-5
+  relative_norm_floor: 1.0e-12
+performance:
+  batch_sizes: [1, 16, 64, 256, 1024]
+  warmup_updates: 20
+  timing_groups: 10
+  updates_per_group: 100
+slurm_baseline:
+  expected_path_count: 500
+  threads_per_path: 3
+  launcher: scripts/slurm/launch_rve_production.sh
+  sbatch: scripts/slurm/rve_c48_production.sbatch
+figures:
+  output_directory: results/rve_rno_training/rve_rno_c48_v2_500_thermo_w1e1_lr2e4/figures_final
+  dpi: 300
+  representative_path_count: 6

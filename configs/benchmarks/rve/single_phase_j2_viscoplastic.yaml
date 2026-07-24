@@ -1,0 +1,56 @@
+case:
+  name: single_phase_j2_viscoplastic_rve
+  description: Homogeneous periodic Hex8 RVE acceptance benchmark.
+rve:
+  lengths: [1.0, 1.0, 1.0]
+  mesh_divisions: [1, 2, 4]
+  quadrature_order: 2
+  material:
+    type: j2_viscoplastic
+    name: single_phase_rve_j2
+    density: 1.0
+    young_modulus: 3339.9160679991464
+    poisson_ratio: 0.36994096308414537
+    yield_stress: 10.0
+    hardening_modulus: 80.0
+    time_scale: 0.02
+    reference_stress: 10.0
+    rate_exponent: 2.0
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+  newton:
+    max_iterations: 20
+    residual_absolute_tolerance: 1.0e-10
+    residual_relative_tolerance: 1.0e-10
+    increment_absolute_tolerance: 1.0e-12
+    increment_relative_tolerance: 1.0e-10
+    armijo:
+      enabled: true
+      sufficient_decrease: 1.0e-4
+      reduction_factor: 0.5
+      max_backtracks: 20
+path:
+  time_step: 1.0e-3
+  macro_strains:
+    - [0.0020, -0.0005, -0.0005, 0.0000, 0.0000, 0.0100]
+    - [0.0040, -0.0010, -0.0010, 0.0020, -0.0030, 0.0200]
+    - [0.0030, -0.0008, -0.0008, 0.0010, -0.0020, 0.0120]
+    - [0.0045, -0.0012, -0.0012, -0.0010, 0.0020, -0.0100]
+verification:
+  stress_scale: 10.0
+  strain_scale: 0.01
+  hill_mandel_power_scale: 10.0
+  tangent_perturbation: 1.0e-7
+  stress_tolerance: 1.0e-9
+  state_tolerance: 1.0e-9
+  tangent_tolerance: 1.0e-8
+  directional_tangent_tolerance: 1.0e-7
+  periodic_tolerance: 1.0e-12
+  reaction_tolerance: 1.0e-10
+  hill_mandel_tolerance: 1.0e-10
+output:
+  root: results/benchmarks/rve/single_phase_j2_viscoplastic
+  dataset_name: single_phase_rve.h5

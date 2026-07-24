@@ -1,0 +1,81 @@
+case:
+  name: report_fe2_plastic_impact_c48
+  description: Explicit c48 FE2 plastic-impact evolution for report-20260714.
+model:
+  name: report_fe2_plastic_impact_c48
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [0.02, 0.01, 0.01]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [8, 2, 2]
+  material:
+    type: j2_viscoplastic
+    name: preprocessing_placeholder
+    density: 2400.0
+    young_modulus: 1000.0
+    poisson_ratio: 0.2
+    yield_stress: 10.0
+    hardening_modulus: 20.0
+    time_scale: 0.02
+    reference_stress: 10.0
+    rate_exponent: 2.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet:
+      - name: fix_left
+        group: left
+        components: [ux, uy, uz]
+        values: [0.0, 0.0, 0.0]
+    velocity: []
+    traction: []
+    pressure: []
+rve:
+  reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+  circumferential_divisions: 48
+  matrix_radial_divisions: 6
+  axial_divisions: 6
+  execution:
+    backend: process_pool
+    workers: 12
+    threads_per_worker: 1
+analysis:
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+  explicit:
+    scheme: explicit_central_difference
+    time_step: 1.0e-3
+    num_steps: 80
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+loading:
+  group: right
+  amplitude: 40.0
+  duration: 0.02
+  outward_normal: [1.0, 0.0, 0.0]
+verification:
+  plastic_q_threshold: 1.0e-6
+  negative_work_threshold: 1.0e-10
+  stress_drop_threshold: 1.0e-6
+  residual_displacement_threshold: 1.0e-8
+  state_monotonicity_tolerance: 1.0e-12
+  dissipation_tolerance: 1.0e-12
+  energy_scale: 1.0e-1
+  energy_tolerance: 1.0e-1
+output:
+  root: results/reports/report_20260714/fe2_plastic_impact_c48
+  mesh_path: results/reports/report_20260714/fe2_plastic_impact_c48/mesh.msh
+  vtk_path: results/reports/report_20260714/fe2_plastic_impact_c48/mesh.vtu
+  save_vtk: true
+  save_quadrature_vtk: true
+  vtk_step_stride: 1
+  save_history: true
+  fields: [displacement, velocity, acceleration, stress, equivalent_plastic_strain]

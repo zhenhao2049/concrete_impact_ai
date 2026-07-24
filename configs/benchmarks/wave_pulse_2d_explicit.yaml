@@ -1,0 +1,63 @@
+case:
+  name: wave_pulse_2d_explicit
+  description: Two-dimensional explicit longitudinal Gaussian pulse benchmark.
+model:
+  name: wave_pulse_2d_explicit
+  dimension: 2
+  geometry:
+    type: rectangle
+    origin: [0.0, 0.0]
+    size: [1.0, 0.05]
+  mesh:
+    generator: gmsh
+    element_type: quad4
+    divisions: [100, 1]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+section:
+  thickness: 0.02
+analysis:
+  type: wave
+  plane_state: plane_stress
+  time:
+    scheme: explicit_central_difference
+    time_step: 1.0e-6
+    num_steps: 160
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+  linear_solver:
+    backend: scipy
+    method: direct
+  newton:
+    max_iterations: 20
+    residual_tolerance: 1.0e-10
+    increment_tolerance: 1.0e-12
+  surrogate:
+    mode: disabled
+    backend: none
+wave:
+  amplitude: 1.0e-7
+  center: 0.2
+  width: 0.06
+  gauges: [0.5, 0.75]
+output:
+  root: results/benchmarks/codebase/wave_pulse_2d_explicit
+  mesh_path: results/benchmarks/codebase/wave_pulse_2d_explicit/mesh.msh
+  vtk_path: results/benchmarks/codebase/wave_pulse_2d_explicit/mesh.vtu
+  save_vtk: true
+  save_history: true
+  fields: [displacement, strain, stress]
+verification:
+  tolerance: 2.0e-1

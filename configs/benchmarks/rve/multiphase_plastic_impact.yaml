@@ -1,0 +1,107 @@
+case:
+  name: multiphase_rve_plastic_impact
+  description: Plastic loading-unloading pressure impact with heterogeneous FE2 material.
+model:
+  name: multiphase_rve_plastic_impact
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [0.02, 0.01, 0.01]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [4, 2, 2]
+  material:
+    type: j2_viscoplastic
+    name: preprocessing_placeholder
+    density: 2400.0
+    young_modulus: 1000.0
+    poisson_ratio: 0.2
+    yield_stress: 10.0
+    hardening_modulus: 20.0
+    time_scale: 0.02
+    reference_stress: 10.0
+    rate_exponent: 2.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet:
+      - name: fix_left
+        group: left
+        components: [ux, uy, uz]
+        values: [0.0, 0.0, 0.0]
+    velocity: []
+    traction: []
+    pressure: []
+rve:
+  reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+  circumferential_divisions: 16
+  matrix_radial_divisions: 1
+  axial_divisions: 1
+  execution:
+    backend: process_pool
+    workers: 2
+    threads_per_worker: 1
+analysis:
+  execution_order: [explicit, implicit]
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+  explicit:
+    scheme: explicit_central_difference
+    time_step: 2.0e-3
+    num_steps: 40
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+  implicit:
+    scheme: implicit_newmark
+    time_step: 4.0e-3
+    num_steps: 20
+    beta: 0.25
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+    adaptive_time_step:
+      enabled: false
+    newton:
+      max_iterations: 20
+      residual_absolute_tolerance: 1.0e-9
+      residual_relative_tolerance: 1.0e-8
+      increment_absolute_tolerance: 1.0e-12
+      increment_relative_tolerance: 1.0e-8
+      armijo:
+        enabled: true
+        sufficient_decrease: 1.0e-4
+        reduction_factor: 0.5
+        max_backtracks: 20
+loading:
+  group: right
+  amplitude: 40.0
+  duration: 0.02
+  outward_normal: [1.0, 0.0, 0.0]
+spectrum:
+  cell_to_macro_length_ratios: [0.01, 0.05, 0.10]
+verification:
+  response_tolerance: 0.10
+  energy_tolerance: 0.10
+  displacement_scale: 0.02
+  q_scale: 0.10
+  dissipation_scale: 0.01
+  energy_scale: 0.1
+  arrival_time_scale: 0.08
+  plastic_q_threshold: 1.0e-6
+  negative_work_threshold: 1.0e-10
+  stress_drop_threshold: 1.0e-6
+  residual_displacement_threshold: 1.0e-8
+output:
+  root: results/benchmarks/rve/multiphase_plastic_impact
+  mesh_path: results/benchmarks/rve/multiphase_plastic_impact/mesh.msh
+  vtk_path: results/benchmarks/rve/multiphase_plastic_impact/mesh.vtu
+  save_vtk: true
+  save_quadrature_vtk: true
+  vtk_step_stride: 1
+  save_history: true
+  fields: [displacement, velocity, acceleration, stress, equivalent_plastic_strain]

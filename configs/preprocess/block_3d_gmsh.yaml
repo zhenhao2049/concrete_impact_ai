@@ -1,0 +1,38 @@
+name: block_3d_gmsh
+dimension: 3
+geometry:
+  type: box
+  origin: [0.0, 0.0, 0.0]
+  size: [1.0, 0.4, 0.3]
+mesh:
+  generator: gmsh
+  element_type: hex8
+  divisions: [4, 2, 2]
+material:
+  type: linear_elastic
+  name: concrete_linear
+  density: 2400.0
+  young_modulus: 30000000000.0
+  poisson_ratio: 0.2
+quadrature:
+  order: 2
+boundary_conditions:
+  dirichlet:
+    - name: fix_left
+      group: left
+      components: [ux, uy, uz]
+      values: [0.0, 0.0, 0.0]
+  velocity:
+    - name: impact_right_velocity
+      group: right
+      components: [vx]
+      values: [-1.0]
+  traction: []
+  pressure: []
+output:
+  root: results/tests/preprocess
+  mesh_path: results/tests/preprocess/block_3d_gmsh.msh
+  vtk_path: results/tests/preprocess/block_3d_gmsh.vtu
+  save_vtk: true
+  save_history: false
+  fields: [mesh]

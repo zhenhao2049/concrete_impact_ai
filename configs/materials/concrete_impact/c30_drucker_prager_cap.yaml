@@ -1,0 +1,20 @@
+material:
+  type: drucker_prager_cap
+  name: concrete_c30_drucker_prager_cap
+  density: 2400.0
+  young_modulus: 3.0e10
+  poisson_ratio: 0.20
+  friction_parameter: 2.454545454545455
+  cohesion: 3.6545454545454543e6
+  flow_parameter: 0.2454545454545455
+  cohesion_hardening: 0.0
+  kappa_rate: 1.0
+  initial_cap_apex_pressure: 4.02e7
+  cap_transition_ratio: 0.45
+  cap_hardening: 1.0e10
+  max_local_iterations: 30
+  local_tolerance: 1.0e-10
+source:
+  route_document_section: "4.1"
+  concrete_grade: C30
+  cap_parameters: first-version-starting-values

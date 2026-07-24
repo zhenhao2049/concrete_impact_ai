@@ -1,0 +1,55 @@
+case:
+  name: elastic_tension_3d_force
+  description: Three-dimensional beam tension benchmark with right-end force control.
+model:
+  name: elastic_tension_3d_force
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [1.0, 0.1, 0.1]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [10, 1, 1]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.2
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+section:
+  thickness: 1.0
+analysis:
+  type: elastic
+  plane_state: three_dimensional
+  linear_solver:
+    backend: scipy
+    method: direct
+  newton:
+    max_iterations: 20
+    residual_tolerance: 1.0e-10
+    increment_tolerance: 1.0e-12
+  surrogate:
+    mode: disabled
+    backend: none
+loading:
+  control: force
+  right_force: 3000.0
+  steps: 6
+output:
+  root: results/benchmarks/codebase/elastic_tension_3d_force
+  mesh_path: results/benchmarks/codebase/elastic_tension_3d_force/mesh.msh
+  vtk_path: results/benchmarks/codebase/elastic_tension_3d_force/mesh.vtu
+  save_vtk: true
+  save_history: true
+  fields: [displacement, strain, stress]
+verification:
+  tolerance: 1.0e-3

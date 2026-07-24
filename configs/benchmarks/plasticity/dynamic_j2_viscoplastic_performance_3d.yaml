@@ -1,0 +1,87 @@
+case:
+  name: dynamic_j2_viscoplastic_performance_3d
+  description: Equal-accuracy explicit and implicit J2 viscoplastic performance benchmark.
+model:
+  name: dynamic_j2_viscoplastic_performance_3d
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [0.1, 0.01, 0.01]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [40, 1, 1]
+  material:
+    type: j2_viscoplastic
+    name: j2_viscoplastic_performance
+    density: 1.0
+    young_modulus: 3339.9160679991464
+    poisson_ratio: 0.36994096308414537
+    yield_stress: 10.0
+    hardening_modulus: 80.0
+    time_scale: 0.02
+    reference_stress: 10.0
+    rate_exponent: 2.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet:
+      - name: fix_left
+        group: left
+        components: [ux, uy, uz]
+        values: [0.0, 0.0, 0.0]
+    velocity: []
+    traction: []
+    pressure: []
+analysis:
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+  explicit:
+    scheme: explicit_central_difference
+    time_step: 2.5e-5
+    num_steps: 1600
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+  implicit:
+    scheme: implicit_newmark
+    time_step: 5.0e-4
+    num_steps: 80
+    beta: 0.25
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+    adaptive_time_step:
+      enabled: false
+    newton:
+      max_iterations: 20
+      residual_absolute_tolerance: 1.0e-9
+      residual_relative_tolerance: 1.0e-8
+      increment_absolute_tolerance: 1.0e-12
+      increment_relative_tolerance: 1.0e-8
+      armijo:
+        enabled: true
+        sufficient_decrease: 1.0e-4
+        reduction_factor: 0.5
+        max_backtracks: 20
+loading:
+  group: right
+  amplitude: 20.0
+  duration: 0.02
+  outward_normal: [1.0, 0.0, 0.0]
+verification:
+  response_tolerance: 0.01
+  energy_tolerance: 0.01
+  displacement_scale: 0.01
+  dissipation_scale: 1.0e-5
+  energy_scale: 0.01
+output:
+  root: results/benchmarks/plasticity/dynamic_j2_viscoplastic_performance_3d
+  mesh_path: results/benchmarks/plasticity/dynamic_j2_viscoplastic_performance_3d/mesh.msh
+  vtk_path: results/benchmarks/plasticity/dynamic_j2_viscoplastic_performance_3d/mesh.vtu
+  save_vtk: false
+  save_history: true
+  fields: [displacement, stress, equivalent_plastic_strain]

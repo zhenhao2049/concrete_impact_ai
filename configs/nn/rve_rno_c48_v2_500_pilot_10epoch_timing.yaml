@@ -1,0 +1,36 @@
+schema_version: "2.0"
+model:
+  family: energy_rve_rno
+  time_representation: continuous
+  integrator: cs_semi_implicit_forward_euler
+  reference_time_scale: 0.02
+  evolution: direct_rate
+  latent_dimension: 6
+  hidden_size: 128
+  hidden_layers: 4
+  activation: silu
+  dtype: float32
+  device: cuda
+loss:
+  stress: path_normalized_mse
+  thermodynamic_violation_weight: 1.0e-3
+  dissipation_supervision_weight: 1.0e-2
+execution:
+  preload_to_memory: true
+  pin_memory: true
+  non_blocking_transfer: true
+  num_workers: 0
+  compile:
+    enabled: true
+    backend: inductor
+    fullgraph: true
+    dynamic: false
+data_plan: results/rve_rno_training/rve_rno_c48_v2_500_pilot/data/frozen_data_plan.json
+response_shard_manifest: results/rve_rno_training/rve_rno_c48_v2_500_pilot/data/response_shards.json
+data_acceptance_report: results/rve_rno_training/rve_rno_c48_v2_500_pilot/data/acceptance/training_data_acceptance.json
+output_directory: results/rve_rno_training/rve_rno_c48_v2_500_pilot/timing/training_10epoch
+random_seed: 71000
+epochs: 10
+batch_size: 32
+learning_rate: 5.0e-4
+checkpoint_interval: 10

@@ -1,0 +1,35 @@
+schema_version: "1.0"
+data_plan: configs/experiments/rve_rno_fixed_cell_v1.yaml
+response_shard_manifest: results/rve_rno_fixed_cell_v1_production/response_shards.json
+output_directory: results/rve_rno_fixed_cell_v1_production/acceptance_pilot
+split:
+  seed: 61000
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+coverage:
+  strain_norm: [0.0, 0.001, 0.005, 0.015, 0.03, 0.06]
+  strain_rate_norm: [0.0, 0.1, 1.0, 5.0, 20.0]
+  equivalent_stress: [0.0, 1.0, 5.0, 10.0, 30.0]
+  yield_activation_margin: [-10.0, -1.0, 0.0, 0.1, 1.0]
+  triaxiality: [-30.0, -10.0, -1.0, -0.33, 0.33, 1.0, 10.0, 30.0]
+  lode_invariant: [-1.0, -0.5, 0.0, 0.5, 1.0]
+  turning_angle: [0.0, 0.5, 1.0, 1.5707963267948966, 2.5, 3.141592653589793]
+  equivalent_plastic_strain: [0.0, 1.0e-8, 1.0e-5, 1.0e-3, 1.0e-2, 1.0e-1]
+  stress_floor: 1.0e-10
+  increment_floor: 1.0e-14
+  invariant_domain_tolerance: 1.0e-10
+coverage_policy:
+  mode: pilot
+  allowed_missing_bin_indices:
+    turning_angle: [2, 3]
+  limitation_note: >-
+    Pilot training is restricted to the observed fixed-cell data support. It does not
+    certify high-stress, high-strain-rate, strongly activated, or intermediate-turning
+    deployment states.
+thresholds:
+  fe2_out_of_coverage_fraction: 0.05
+  tangent_direction_error: 1.0e-5
+external_checks:
+  single_phase_degeneracy_report: results/benchmarks/rve/single_phase_dynamic_embedding/benchmark_result.json
+  rve_mesh_selection_report: results/benchmarks/rve/rve_rno_fixed_cell_mesh/rve_mesh_selection.json

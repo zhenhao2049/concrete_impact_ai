@@ -1,0 +1,6 @@
+dynamics:
+  scheme: explicit_newmark
+  beta: 0.0
+  gamma: 0.5
+  cfl_safety_factor: 0.8
+

@@ -1,0 +1,24 @@
+rve:
+  reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+  circumferential_divisions: 16
+  matrix_radial_divisions: 2
+  axial_divisions: 1
+analysis:
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+performance:
+  workers: 2
+  repetitions: 5
+  batch_sizes: [16, 64]
+  time_step: 1.0e-3
+  macro_strain_path:
+    - [0.002, -0.0005, -0.0005, 0.0, 0.0, 0.005]
+    - [0.010, -0.0020, -0.0020, 0.0, 0.0, 0.015]
+    - [0.006, -0.0010, -0.0010, 0.0, 0.0, 0.005]
+verification:
+  backend_equivalence_tolerance: 1.0e-12
+output:
+  root: results/performance/rve_execution

@@ -1,0 +1,44 @@
+case:
+  name: plastic_dp_cap_confined_triaxial
+  description: Drucker-Prager/Cap fixed-confinement triaxial compression benchmark.
+model:
+  material:
+    type: drucker_prager_cap
+    name: concrete_dp_cap_confined_triaxial_benchmark
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.20
+    friction_parameter: 0.8
+    cohesion: 3.0e6
+    flow_parameter: 0.05
+    cohesion_hardening: 0.0
+    kappa_rate: 1.0
+    initial_cap_apex_pressure: 3.5e7
+    cap_transition_ratio: 0.45
+    cap_hardening: 0.0
+    max_local_iterations: 40
+    local_tolerance: 1.0e-12
+analysis:
+  time_step: 1.0
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+benchmark:
+  type: dp_cap_confined_triaxial
+  num_steps: 121
+  max_axial_compression_strain: 4.0e-3
+  confining_pressures: [0.0, 5.0e6, 1.0e7, 1.6e7, 2.2e7]
+  lateral_newton_max_iterations: 25
+  lateral_stress_tolerance: 1.0e-3
+  need_tangent: false
+  x_name: axial_compression_strain
+  plot_pairs:
+    - numerical: q_numerical
+      exact: q_exact
+verification:
+  relative_tolerance: 1.0e-8
+  absolute_tolerance: 1.0e-3
+output:
+  root: results/benchmarks/plasticity/plastic_dp_cap_confined_triaxial

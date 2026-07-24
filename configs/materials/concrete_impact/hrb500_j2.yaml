@@ -1,0 +1,13 @@
+material:
+  type: j2_plastic
+  name: steel_hrb500_j2
+  density: 7850.0
+  young_modulus: 2.0e11
+  poisson_ratio: 0.30
+  yield_stress: 5.0e8
+  ultimate_stress: 6.3e8
+  hardening_modulus: 2.0e9
+  kinematic_fraction: 0.0
+source:
+  route_document_section: "4.2"
+  steel_grade: HRB500

@@ -1,0 +1,91 @@
+case:
+  name: rve_rno_dynamic_material_speedup
+  description: Same-machine tensile-pulse dynamics comparison of direct FE2 and c48 Direct-RNO.
+model:
+  name: rve_rno_dynamic_material_speedup
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [0.02, 0.01, 0.01]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [1, 1, 1]
+  material:
+    type: linear_elastic
+    name: preprocessing_placeholder
+    density: 2400.0
+    young_modulus: 1000.0
+    poisson_ratio: 0.2
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet:
+      - name: fix_left
+        group: left
+        components: [ux, uy, uz]
+        values: [0.0, 0.0, 0.0]
+    velocity: []
+    traction: []
+    pressure: []
+rve:
+  reference_config: configs/benchmarks/rve/cylindrical_inclusion.yaml
+  resolution_label: c16_r2_z1
+  circumferential_divisions: 16
+  matrix_radial_divisions: 2
+  axial_divisions: 1
+  execution:
+    backend: process_pool
+    workers: 8
+    threads_per_worker: 1
+artifact:
+  scope: c48_v2_500_pilot
+  model:
+    family: energy_rve_rno
+    time_representation: continuous
+    integrator: cs_semi_implicit_forward_euler
+    evolution: direct_rate
+    reference_time_scale: 0.02
+    latent_dimension: 6
+    hidden_size: 128
+    hidden_layers: 4
+    activation: silu
+    dtype: float32
+    device: cpu
+  checkpoint: results/rve_rno_training/rve_rno_c48_v2_500_pilot/training/run_20260717_232528/best_model.pt
+  metadata: results/rve_rno_training/rve_rno_c48_v2_500_pilot/training/run_20260717_232528/artifact_metadata.json
+analysis:
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+  explicit:
+    scheme: velocity_verlet
+    time_step: 1.0e-3
+    num_steps: 8
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+  performance:
+    warmup_repeats: 1
+    measured_repeats: 3
+    thread_count: 8
+loading:
+  group: right
+  amplitude: -40.0
+  duration: 0.004
+  outward_normal: [1.0, 0.0, 0.0]
+verification:
+  minimum_material_update_speedup: 10.0
+  maximum_displacement_error: 0.15
+  maximum_axial_stress_error: 0.15
+  maximum_peak_displacement_error: 0.15
+output:
+  root: results/benchmarks/rve/rve_rno_dynamic_material_speedup_tension_p40_final_20260718
+  mesh_path: results/benchmarks/rve/rve_rno_dynamic_material_speedup_tension_p40_final_20260718/mesh.msh
+  vtk_path: results/benchmarks/rve/rve_rno_dynamic_material_speedup_tension_p40_final_20260718/mesh.vtu
+  save_vtk: false
+  save_history: false
+  fields: []

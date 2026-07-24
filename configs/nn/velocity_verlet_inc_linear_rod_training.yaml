@@ -1,0 +1,23 @@
+schema_version: "1.0"
+model:
+  family: velocity_verlet_inc_mlp
+  time_representation: discrete
+  hidden_size: 256
+  residual_blocks: 4
+  activation: silu
+  dtype: float64
+  device: cuda
+dataset_path: data/inc/velocity_verlet_linear_rod_v1.h5
+output_directory: results/velocity_verlet_inc_training/linear_rod_v1
+random_seed: 0
+pretrain_epochs: 200
+rollout_epochs: 200
+pretrain_batch_size: 128
+rollout_batch_size: 8
+rollout_steps: 16
+pretrain_learning_rate: 1.0e-3
+rollout_learning_rate: 1.0e-4
+rollout_label_weight: 0.1
+rollout_energy_weight: 0.01
+label_acceptance: 0.15
+checkpoint_interval: 20

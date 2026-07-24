@@ -1,0 +1,49 @@
+schema_version: "1.0"
+data_plan: configs/experiments/rve_rno_c48_v2_2000.yaml
+response_shard_manifest: results/rve_rno_c48_v2_2000/response_shards.json
+output_directory: results/rve_rno_c48_v2_2000/acceptance
+split:
+  seed: 71000
+  strategy: deterministic_design_stratum
+  train_fraction: 0.80
+  validation_fraction: 0.10
+  test_fraction: 0.10
+coverage:
+  strain_norm: [0.0, 3.0e-4, 1.0e-3, 5.0e-3, 1.5e-2, 3.0e-2, 5.0e-2]
+  strain_rate_norm: [0.0, 0.1, 1.0, 5.0, 20.0, 40.0]
+  equivalent_stress: [0.0, 2.0, 5.0, 10.0, 20.0, 40.0]
+  yield_activation_margin: [-2.0, -0.5, 0.0, 0.05, 0.5, 5.0]
+  triaxiality: [-100.0, -1.0, -0.33, 0.33, 1.0, 100.0]
+  lode_invariant: [-1.0, -0.5, 0.0, 0.5, 1.0]
+  turning_angle: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.141592653589793]
+  equivalent_plastic_strain: [0.0, 1.0e-8, 1.0e-5, 1.0e-3, 1.0e-2, 1.0e-1, 3.0e-1]
+  stress_floor: 1.0e-10
+  increment_floor: 1.0e-14
+  invariant_domain_tolerance: 1.0e-10
+coverage_policy:
+  mode: strict
+joint_coverage:
+  elastic_amplitude_bands: [A1, A2]
+  transition_amplitude_bands: [A3]
+  minimum_path_count: 1
+  medium_rate_lower: 1.0
+  medium_rate_upper: 20.0
+  medium_high_stress_lower: 10.0
+  positive_yield_margin: 0.0
+  positive_plastic_strain: 1.0e-8
+  weak_plastic_strain_upper: 1.0e-3
+  negative_incremental_work: -1.0e-12
+  positive_cumulative_dissipation: 1.0e-12
+  turning_angle_lower: 1.0
+  turning_angle_upper: 2.5
+  triaxiality_sign_floor: 0.05
+  lode_bin_edges: [-1.0, -0.33, 0.33, 1.0]
+  minimum_lode_bins_per_sign: 2
+  elastic_plastic_strain_tolerance: 1.0e-12
+  elastic_dissipation_tolerance: 1.0e-12
+thresholds:
+  fe2_out_of_coverage_fraction: 0.05
+  tangent_direction_error: 1.0e-5
+external_checks:
+  single_phase_degeneracy_report: null
+  rve_mesh_selection_report: results/benchmarks/rve/rve_rno_fixed_cell_mesh/rve_mesh_selection.json

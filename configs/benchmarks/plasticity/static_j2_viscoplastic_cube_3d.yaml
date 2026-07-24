@@ -1,0 +1,56 @@
+case:
+  name: static_j2_viscoplastic_cube_3d
+  description: Three-dimensional static nonlinear cube benchmark for J2 viscoplastic FEM.
+model:
+  name: static_j2_viscoplastic_cube_3d
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [1.0, 1.0, 1.0]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [1, 1, 1]
+  material:
+    type: j2_viscoplastic
+    name: j2_viscoplastic_static_cube_benchmark
+    density: 1.0
+    young_modulus: 3339.9160679991464
+    poisson_ratio: 0.36994096308414537
+    yield_stress: 10.0
+    hardening_modulus: 80.0
+    time_scale: 30.0
+    reference_stress: 10.0
+    rate_exponent: 1.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+analysis:
+  time_step: 2.0
+  num_steps: 250
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+solver:
+  newton:
+    max_iterations: 30
+    residual_tolerance: 1.0e-8
+    increment_tolerance: 1.0e-11
+benchmark:
+  type: static_j2_viscoplastic_cube_3d
+  mesh_divisions: [1, 5]
+  axial_strain_rate: 4.6e-5
+  lateral_stress_tolerance: 1.0e-8
+  lateral_newton_max_iterations: 30
+verification:
+  relative_tolerance: 1.0e-7
+  absolute_tolerance: 1.0e-6
+output:
+  root: results/benchmarks/plasticity/static_j2_viscoplastic_cube_3d

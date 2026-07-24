@@ -1,0 +1,19 @@
+schema_version: "1.0"
+training_config: configs/nn/rve_rno_c48_v2_k6_gpu_direct.yaml
+checkpoint: results/rve_rno_training/c48_v2_k6_gpu_direct/best_model.pt
+artifact_metadata: results/rve_rno_training/c48_v2_k6_gpu_direct/artifact_metadata.json
+training_data_acceptance: results/rve_rno_c48_v2_2000/acceptance/training_data_acceptance.json
+macro_embedding_report: results/rve_rno_training/c48_v2_k6_gpu_direct/macro_embedding_validation.json
+output_path: results/rve_rno_training/c48_v2_k6_gpu_direct/artifact_acceptance.json
+tangent_paths: 50
+tangent_states_per_path: 4
+finite_difference_perturbation: 1.0e-5
+thresholds:
+  test_stress_rmse: 0.08
+  family_stress_error: 0.12
+  maximum_path_stress_error: 0.25
+  normalized_dissipation_error: 0.20
+  negative_dissipation_tolerance: 1.0e-12
+  tangent_median_error: 0.15
+  tangent_p95_error: 0.30
+  macro_relative_error: 0.10

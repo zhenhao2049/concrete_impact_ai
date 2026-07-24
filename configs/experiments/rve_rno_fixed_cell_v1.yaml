@@ -1,0 +1,83 @@
+schema_version: "4.0"
+purpose: fixed_cell_rve_training
+storage_mode: compact_streaming
+output_directory: results/rve_rno_fixed_cell_v1_production
+mesh_selection_report: results/benchmarks/rve/rve_rno_fixed_cell_mesh/rve_mesh_selection.json
+parallel:
+  workers: 5
+  paths_per_task: 1
+  shard_path_count: 1
+  compression: lzf
+  thread_count_per_worker: 3
+  logical_cpu_budget: 16
+audit:
+  q_tolerance: 1.0e-12
+  plastic_q_threshold: 1.0e-8
+  dissipation_tolerance: 1.0e-12
+  positive_cumulative_dissipation_threshold: 1.0e-12
+  work_tolerance: 1.0e-12
+  stress_drop_threshold: 1.0e-10
+  strain_increment_tolerance: 1.0e-14
+  hold_strain_tolerance: 1.0e-14
+  hold_stress_relaxation_threshold: 1.0e-10
+  tangent_perturbation: 1.0e-7
+  tangent_stress_scale: 10.0
+  tangent_direction_tolerance: 1.0e-5
+sources:
+  - name: fixed_cylindrical_inclusion_rve
+    kind: heterogeneous_rve
+    model: fixed_periodic_ogrid_j2_matrix_elastic_inclusion_v1
+    boundary:
+      kind: periodic_macro_strain
+      description: Exact periodic fluctuation constraint and perfect matrix-inclusion interface.
+    load_cases:
+      - name: elastic_fixed_cell_paths
+        path_count: 40
+        time_points: 64
+        duration: 0.02
+        excitation: prescribed_six_component_strain
+        seed: 51000
+        peak_scale: 0.001
+        path_families: [monotonic, load_unload_reload, reverse, hold, nonproportional]
+        expected_response:
+          regime: elastic
+          require_unloading: false
+          require_reverse_loading: false
+      - name: viscoplastic_fixed_cell_paths
+        path_count: 40
+        time_points: 64
+        duration: 0.02
+        excitation: cyclic_nonproportional_strain
+        seed: 52000
+        peak_scale: 0.03
+        path_families: [monotonic, load_unload_reload, reverse, hold, nonproportional]
+        expected_response:
+          regime: viscoplastic
+          require_unloading: false
+          require_reverse_loading: false
+    fields:
+      inputs: [time, time_step, macro_strain]
+      labels: [macro_stress, effective_tangent, dissipation_density]
+      state_fields: []
+      diagnostics:
+        - phase_average_stress
+        - phase_volume_fraction
+        - hill_mandel_error
+        - incremental_work_density
+        - viscoplastic_active_volume_fraction
+    training_role: homogenization
+    macro_path_origin: prescribed_macro_strain
+    material_parameters:
+      matrix_young_modulus: {kind: fixed, value: 1000.0}
+      matrix_poisson_ratio: {kind: fixed, value: 0.2}
+      matrix_yield_stress: {kind: fixed, value: 10.0}
+      matrix_hardening_modulus: {kind: fixed, value: 20.0}
+      matrix_time_scale: {kind: fixed, value: 0.02}
+      matrix_rate_exponent: {kind: fixed, value: 2.0}
+      inclusion_young_modulus: {kind: fixed, value: 6666.666666666667}
+      inclusion_poisson_ratio: {kind: fixed, value: 0.3}
+    microstructure_parameters:
+      inclusion_volume_fraction: {kind: fixed, value: 0.05}
+      circumferential_divisions: {kind: fixed, value: 64.0}
+      matrix_radial_divisions: {kind: fixed, value: 8.0}
+      axial_divisions: {kind: fixed, value: 8.0}

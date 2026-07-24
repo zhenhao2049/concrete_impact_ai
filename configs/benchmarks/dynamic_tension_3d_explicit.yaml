@@ -1,0 +1,62 @@
+case:
+  name: dynamic_tension_3d_explicit
+  description: Three-dimensional harmonic beam tension benchmark with explicit central difference.
+model:
+  name: dynamic_tension_3d_explicit
+  dimension: 3
+  geometry:
+    type: box
+    origin: [0.0, 0.0, 0.0]
+    size: [1.0, 0.1, 0.1]
+  mesh:
+    generator: gmsh
+    element_type: hex8
+    divisions: [20, 1, 1]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.2
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+section:
+  thickness: 1.0
+analysis:
+  type: dynamic
+  plane_state: three_dimensional
+  time:
+    scheme: explicit_central_difference
+    time_step: 1.0e-6
+    num_steps: 200
+    beta: 0.0
+    gamma: 0.5
+    cfl_safety_factor: 0.8
+  linear_solver:
+    backend: scipy
+    method: direct
+  newton:
+    max_iterations: 20
+    residual_tolerance: 1.0e-10
+    increment_tolerance: 1.0e-12
+  surrogate:
+    mode: disabled
+    backend: none
+loading:
+  control: displacement
+  amplitude: 1.0e-6
+  angular_frequency: 1000.0
+output:
+  root: results/benchmarks/codebase/dynamic_tension_3d_explicit
+  mesh_path: results/benchmarks/codebase/dynamic_tension_3d_explicit/mesh.msh
+  vtk_path: results/benchmarks/codebase/dynamic_tension_3d_explicit/mesh.vtu
+  save_vtk: true
+  save_history: true
+  fields: [displacement, strain, stress]
+verification:
+  tolerance: 7.5e-2

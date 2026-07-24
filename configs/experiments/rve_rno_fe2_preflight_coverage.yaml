@@ -1,0 +1,5 @@
+j2_response_shard_manifest: results/rve_rno_data_pilot_v2/response_shards.json
+fe2_response_shard_manifest: results/rve_rno_fe2_preflight/response_shards.json
+coverage_reference: configs/nn/rno_training_data_acceptance.yaml
+fe2_out_of_coverage_fraction: 0.05
+output_path: results/rve_rno_fe2_preflight/fe2_preflight_coverage.json

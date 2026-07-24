@@ -1,0 +1,43 @@
+batch_size: 256
+checkpoint_interval: 25
+data_acceptance_report: results/rve_rno_training/rve_rno_c48_v2_2000/validation_staging/acceptance/training_data_acceptance.json
+data_plan: configs/experiments/rve_rno_c48_v2_2000.yaml
+epochs: 500
+execution:
+  batching_strategy: length_bucket
+  compile:
+    backend: inductor
+    dynamic: false
+    enabled: true
+    fullgraph: true
+    mode: default
+    scope: constitutive_step
+  fused_adam: true
+  matmul_precision: highest
+  non_blocking_transfer: false
+  num_workers: 0
+  pin_memory: false
+  preload_device: cuda
+  preload_to_memory: true
+  validation_batching_strategy: single_padded_batch
+learning_rate: 0.0005
+loss:
+  dissipation_supervision_weight: 0.01
+  stress: path_normalized_mse
+  thermodynamic_violation_weight: 0.001
+model:
+  activation: silu
+  device: cuda
+  dtype: float32
+  evolution: direct_rate
+  family: energy_rve_rno
+  hidden_layers: 4
+  hidden_size: 128
+  integrator: current_state_stress_forward_euler
+  latent_dimension: 6
+  reference_time_scale: 0.02
+  time_representation: continuous
+output_directory: results/rve_rno_training/c48_v2_liu_direct_gpu_optimized/run_20260719_142907
+random_seed: 72000
+response_shard_manifest: results/rve_rno_training/rve_rno_c48_v2_2000/validation_staging/response_shards.json
+schema_version: '2.0'

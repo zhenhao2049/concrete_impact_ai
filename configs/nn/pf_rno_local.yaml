@@ -1,0 +1,15 @@
+model:
+  name: pf_rno_local
+  hidden_size: 128
+  num_layers: 3
+training:
+  batch_size: 32
+  learning_rate: 1.0e-3
+  epochs: 100
+loss:
+  stress_weight: 1.0
+  crack_driving_force_weight: 1.0
+  dissipation_weight: 0.1
+  irreversibility_weight: 0.1
+  phasefield_residual_weight: 0.1
+

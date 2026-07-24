@@ -1,0 +1,57 @@
+{
+  "acceptance_limitation_note": null,
+  "acceptance_scope": "strict",
+  "cuda_available": true,
+  "cuda_version": "13.0",
+  "cudnn_version": 92000,
+  "data_plan_sha256": "c76afeebc355431f5d704ec3125b9888fa440b3021da6a2bb4e279aea0ce8963",
+  "device": "cuda",
+  "execution": {
+    "batching_strategy": "length_bucket",
+    "compile": {
+      "backend": "inductor",
+      "dynamic": false,
+      "enabled": true,
+      "fullgraph": true,
+      "mode": "default",
+      "scope": "constitutive_step"
+    },
+    "fused_adam": true,
+    "matmul_precision": "highest",
+    "non_blocking_transfer": false,
+    "num_workers": 0,
+    "pin_memory": false,
+    "preload_device": "cuda",
+    "preload_to_memory": true,
+    "validation_batching_strategy": "single_padded_batch"
+  },
+  "gpu_memory_bytes": 16594239488,
+  "gpu_name": "NVIDIA GeForce RTX 5060 Ti",
+  "loss": {
+    "dissipation_supervision_weight": 0.01,
+    "stress": "path_normalized_mse",
+    "thermodynamic_violation_weight": 0.001
+  },
+  "model": {
+    "activation": "silu",
+    "device": "cuda",
+    "dtype": "float32",
+    "evolution": "direct_rate",
+    "family": "energy_rve_rno",
+    "hidden_layers": 4,
+    "hidden_size": 128,
+    "integrator": "current_state_stress_forward_euler",
+    "latent_dimension": 6,
+    "reference_time_scale": 0.02,
+    "time_representation": "continuous"
+  },
+  "normalization_sha256": "2a487639362336275671f05c56ea495407255e207276b8f95fe0c5754ff1c641",
+  "optimizer": {
+    "fused": true,
+    "learning_rate": 0.0005,
+    "name": "Adam"
+  },
+  "random_seed": 72000,
+  "split_manifest_sha256": "921acbb9871da0a92ac19ecd6334412d903598f414c8a1a886328bd9a1bf930d",
+  "torch_version": "2.12.1+cu130"
+}

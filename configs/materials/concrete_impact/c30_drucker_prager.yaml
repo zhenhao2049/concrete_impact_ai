@@ -1,0 +1,16 @@
+material:
+  type: drucker_prager
+  name: concrete_c30_drucker_prager
+  density: 2400.0
+  young_modulus: 3.0e10
+  poisson_ratio: 0.20
+  friction_parameter: 2.454545454545455
+  cohesion: 3.6545454545454543e6
+  flow_parameter: 0.2454545454545455
+  cohesion_hardening: 0.0
+  kappa_rate: 1.0
+source:
+  route_document_section: "4.1"
+  concrete_grade: C30
+  compressive_strength: 20.1e6
+  tensile_strength: 2.01e6

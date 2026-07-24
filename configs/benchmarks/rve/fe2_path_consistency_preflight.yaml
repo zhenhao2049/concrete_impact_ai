@@ -1,0 +1,48 @@
+case:
+  name: fe2_path_consistency
+  description: Low-cost FE2 path-consistency pipeline preflight.
+base_config: configs/benchmarks/rve/multiphase_plastic_impact.yaml
+rve_mesh:
+  mode: fixed_preflight
+  circumferential_divisions: 16
+  matrix_radial_divisions: 1
+  axial_divisions: 1
+macro_mesh:
+  baseline: [4, 2, 2]
+  refined: [8, 2, 2]
+time_levels:
+  coarse: {time_step: 2.0e-3, final_time: 8.0e-2}
+  fine: {time_step: 1.0e-3, final_time: 8.0e-2}
+performance:
+  enabled: false
+  warmup_repetitions: 1
+  repetitions: 3
+  conservative_speedup_target: 1.2
+verification:
+  scales:
+    displacement: 2.0e-2
+    velocity: 5.0
+    strain: 5.0e-2
+    stress: 10.0
+    equivalent_plastic_strain: 1.0e-1
+    dissipation: 1.0e-2
+    incremental_work_density: 1.0e-2
+    viscoplastic_active_volume_fraction: 1.0
+  path_tolerances:
+    displacement: 2.0e-2
+    velocity: 2.0e-2
+    strain: 2.0e-2
+    stress: 5.0e-2
+    equivalent_plastic_strain: 5.0e-2
+    dissipation: 5.0e-2
+    incremental_work_density: 5.0e-2
+    viscoplastic_active_volume_fraction: 5.0e-2
+  physical:
+    plastic_q_threshold: 1.0e-6
+    negative_work_threshold: 1.0e-10
+    stress_drop_threshold: 1.0e-6
+    residual_displacement_threshold: 1.0e-8
+    energy_scale: 1.0e-1
+    energy_tolerance: 1.0e-1
+output:
+  root: results/benchmarks/rve/fe2_path_consistency_preflight_v4

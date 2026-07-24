@@ -1,0 +1,34 @@
+case:
+  name: plastic_j2_pure_shear
+  description: J2 perfect-plastic material-point pure-shear benchmark.
+model:
+  material:
+    type: j2_plastic
+    name: steel_j2_perfect_plastic_benchmark
+    density: 7850.0
+    young_modulus: 2.0e11
+    poisson_ratio: 0.30
+    yield_stress: 4.0e8
+    hardening_modulus: 0.0
+    kinematic_fraction: 0.0
+analysis:
+  time_step: 1.0
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+benchmark:
+  type: j2_pure_shear
+  num_steps: 121
+  max_shear_strain: 6.0e-3
+  need_tangent: true
+  x_name: shear_strain
+  plot_pairs:
+    - numerical: shear_stress_numerical
+      exact: shear_stress_exact
+verification:
+  relative_tolerance: 1.0e-10
+  absolute_tolerance: 1.0e-3
+output:
+  root: results/benchmarks/plasticity/plastic_j2_pure_shear

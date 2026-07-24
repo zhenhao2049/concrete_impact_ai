@@ -1,0 +1,34 @@
+name: surrogate-model
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - threadpoolctl
+  - pandas
+  - matplotlib
+  - h5py
+  - pyyaml
+  - pydantic>=2,<3
+  - typer
+  - rich
+  - tqdm
+  - mpi4py
+  - petsc
+  - petsc4py
+  - slepc
+  - slepc4py
+  - pyamg
+  - meshio
+  - python-gmsh
+  - pyvista
+  - pip
+  - pytest
+  - pytest-cov
+  - ruff
+  - mypy
+  - ipykernel
+  - pip:
+      - --index-url https://download.pytorch.org/whl/cu130
+      - torch==2.12.1+cu130

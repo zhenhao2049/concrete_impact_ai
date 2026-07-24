@@ -1,0 +1,40 @@
+case:
+  name: plastic_j2_viscoplastic_material_point
+  description: Rate-dependent J2 viscoplastic material-point benchmark.
+model:
+  material:
+    type: j2_viscoplastic
+    name: j2_viscoplastic_material_point_benchmark
+    density: 1.0
+    young_modulus: 3339.9160679991464
+    poisson_ratio: 0.36994096308414537
+    yield_stress: 10.0
+    hardening_modulus: 80.0
+    time_scale: 30.0
+    reference_stress: 10.0
+    rate_exponent: 1.0
+analysis:
+  time_step: 2.0
+  material_update:
+    max_iterations: 50
+    yield_relative_tolerance: 1.0e-10
+    residual_absolute_tolerance: 1.0e-12
+    residual_relative_tolerance: 1.0e-10
+benchmark:
+  type: j2_viscoplastic_material_point
+  num_steps: 121
+  max_shear_strain: 0.023
+  need_tangent: true
+  x_name: shear_strain
+  plot_pairs:
+    - numerical: shear_stress_numerical
+      exact: shear_stress_exact
+    - numerical: equivalent_plastic_strain_numerical
+      exact: equivalent_plastic_strain_exact
+    - numerical: plastic_multiplier_numerical
+      exact: plastic_multiplier_exact
+verification:
+  relative_tolerance: 1.0e-10
+  absolute_tolerance: 1.0e-9
+output:
+  root: results/benchmarks/plasticity/plastic_j2_viscoplastic_material_point
