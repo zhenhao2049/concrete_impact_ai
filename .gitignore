@@ -48,6 +48,8 @@ results/**/*.ckpt
 results/rve_rno_training/
 results/rve_stage0_c48/
 results/transfers/
+training_logs/
+slurm_logs/
 
 # Public evidence data are limited to metadata and one committed sample.
 data/rve_rno_c48_v2_2000/sample/*.h5

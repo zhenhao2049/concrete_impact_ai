@@ -1,0 +1,86 @@
+schema_version: "1.0"
+name: inc_elastic_multimode_half_sine_spatial_v3
+data:
+  root: results/dynamics/inc_training_elastic/official
+  system_path: results/dynamics/inc_training_elastic/official/system.h5
+  manifest_path: results/dynamics/inc_training_elastic/official/manifest.json
+  acceptance_path: results/dynamics/inc_training_elastic/official/data_acceptance.json
+  cache_directory: results/cache/inc_elastic_multimode_half_sine_spatial_v1
+  source_split_policy: training_pool_resplit
+  train_paths:
+    - official_s1_w1_d3_a3
+    - official_s1_w1_d4_a1
+    - official_s2_w1_d3_a1
+    - official_s2_w1_d4_a2
+    - official_s3_w1_d3_a2
+    - official_s3_w1_d4_a3
+    - official_s4_w1_d3_a3
+    - official_s4_w1_d4_a1
+    - official_s5_w1_d3_a1
+    - official_s5_w1_d4_a2
+    - official_s6_w1_d3_a2
+    - official_s6_w1_d4_a3
+  validation_paths:
+    - official_s7_w1_d3_a3
+    - official_s7_w1_d4_a1
+  test_paths:
+    - official_s8_w1_d3_a1
+    - official_s8_w1_d4_a2
+  sample_stride: 2
+features:
+  modal_count: 400
+  include_time: true
+  include_duration: true
+  include_spatial_coefficients: true
+  include_pulse_endpoints: true
+  include_modal_phase: true
+  include_duration_modal_phase: false
+model:
+  family: inc_elastic_multimode_mlp
+  hidden_size: 512
+  residual_blocks: 3
+  activation: silu
+  free_dof_count: 400
+  dtype: float32
+  device: cuda
+loss:
+  label_weight: 1.0
+  step_weight: 1.0
+  energy_weight: 0.01
+  displacement_component_weight: 1.5
+  velocity_component_weight: 0.5
+execution:
+  preload_device: cuda
+  fem_dtype: float64
+  batch_size: 2048
+  prediction_batch_size: 2048
+  matmul_precision: highest
+  minimum_total_vram_gib: 12.0
+  minimum_free_vram_gib: 8.0
+training:
+  random_seed: 0
+  epochs: 200
+  learning_rate: 3.0e-4
+  checkpoint_interval: 10
+  full_validation_interval: 10
+  optimizer: adam
+acceptance:
+  oracle_reconstruction_error: 1.0e-11
+  label_mass_dual_nrmse: 0.20
+  displacement_error_ratio: 0.70
+  velocity_error_ratio: 0.70
+  energy_error_ratio: 0.80
+  normalized_impulse_balance_error: 1.0e-11
+  arrival_threshold_ratio: 0.05
+  require_arrival_not_worse: true
+  require_peak_not_worse: true
+  require_phase_not_worse: true
+benchmark:
+  fine_ratio: 64
+  fine_warmup: 1
+  fine_repeats: 3
+  coarse_warmup: 2
+  coarse_repeats: 10
+  inc_warmup: 2
+  inc_repeats: 10
+output_directory: results/velocity_verlet_inc_training/inc_elastic_multimode_half_sine_spatial_v3

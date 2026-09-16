@@ -1,0 +1,51 @@
+schema_version: "2.0"
+dataset_type: linear_elastic_velocity_verlet_inc
+design: p0_7
+release_status: pilot
+output_directory: results/dynamics/inc_training_elastic/p0
+model:
+  name: inc_elastic_p0_linear_rod
+  dimension: 2
+  geometry:
+    type: rectangle
+    origin: [0.0, 0.0]
+    size: [1.0, 0.05]
+  mesh:
+    generator: gmsh
+    element_type: quad4
+    divisions: [40, 1]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.0
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+plane_state: plane_stress
+thickness: 0.02
+fixed_boundary: left
+load_boundary: right
+time_step: 5.0e-6
+num_steps: 120
+coarse_cfl_ratio: 0.8
+fine_ratio: 8
+reference_ratio: 16
+pressure_amplitudes: [7.5e5, 8.75e5, 1.0e6]
+duration_ratios: []
+pilot_pressure_amplitude: 8.75e5
+compression: gzip
+compression_level: 1
+chunk_steps: 64
+progress_updates: 10
+thresholds:
+  displacement: 5.0e-3
+  velocity: 5.0e-3
+  energy: 5.0e-3
+  label_reconstruction: 1.0e-11
+  minimum_response: 1.0e-12

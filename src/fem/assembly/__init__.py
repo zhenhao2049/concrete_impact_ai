@@ -13,7 +13,11 @@ from fem.assembly.elasticity import (
     assemble_stiffness_matrix,
     build_strain_displacement_matrix,
 )
-from fem.assembly.load import assemble_uniform_boundary_pressure, assemble_uniform_boundary_traction
+from fem.assembly.load import (
+    assemble_boundary_traction,
+    assemble_uniform_boundary_pressure,
+    assemble_uniform_boundary_traction,
+)
 from fem.assembly.nonlinear_solid import (
     assemble_bundle_material_response,
     assemble_hex8_material_response,
@@ -25,6 +29,7 @@ from fem.assembly.nonlinear_solid import (
 
 __all__ = [
     "apply_dirichlet_to_linear_system",
+    "assemble_boundary_traction",
     "assemble_consistent_mass_matrix",
     "assemble_lumped_mass_vector",
     "assemble_stiffness_matrix",

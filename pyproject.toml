@@ -62,6 +62,8 @@ concrete-impact-evaluate-rve-rno = "concrete_impact.cli.evaluate_rve_rno:main"
 concrete-impact-analyze-rve-rno-s0 = "concrete_impact.cli.analyze_rve_rno_s0:main"
 concrete-impact-generate-inc-data = "concrete_impact.cli.generate_inc_data:main"
 concrete-impact-train-inc = "concrete_impact.cli.train_velocity_verlet_inc:main"
+concrete-impact-generate-elastic-inc-data = "concrete_impact.cli.inc_elastic_data:main"
+concrete-impact-run-elastic-inc = "concrete_impact.cli.inc_elastic_multimode:main"
 concrete-impact-validate-rve-rno-artifact = "concrete_impact.cli.validate_rve_rno_artifact:main"
 concrete-impact-export-rve-snapshots = "concrete_impact.cli.export_rve_snapshots:main"
 

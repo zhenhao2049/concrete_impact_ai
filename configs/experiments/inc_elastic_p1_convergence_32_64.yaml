@@ -1,0 +1,51 @@
+schema_version: "2.0"
+dataset_type: linear_elastic_velocity_verlet_inc
+design: p1_pilot_12
+release_status: pilot
+output_directory: results/dynamics/inc_training_elastic/diagnostics/time_32_64
+model:
+  name: inc_elastic_p1_multimodal
+  dimension: 2
+  geometry:
+    type: rectangle
+    origin: [0.0, 0.0]
+    size: [1.0, 0.05]
+  mesh:
+    generator: gmsh
+    element_type: quad4
+    divisions: [40, 4]
+  material:
+    type: linear_elastic
+    name: concrete_linear
+    density: 2400.0
+    young_modulus: 3.0e10
+    poisson_ratio: 0.2
+  quadrature:
+    order: 2
+  boundary_conditions:
+    dirichlet: []
+    velocity: []
+    traction: []
+    pressure: []
+plane_state: plane_stress
+thickness: 0.02
+fixed_boundary: left
+load_boundary: right
+time_step: 2.012461179743926e-6
+num_steps: 19877
+coarse_cfl_ratio: 0.6
+fine_ratio: 32
+reference_ratio: 64
+pressure_amplitudes: [7.5e5, 1.0e6, 1.25e6]
+duration_ratios: [0.25, 0.5, 0.75, 1.0, 1.5, 2.0]
+pilot_pressure_amplitude: 1.0e6
+compression: gzip
+compression_level: 1
+chunk_steps: 256
+progress_updates: 20
+thresholds:
+  displacement: 5.0e-3
+  velocity: 5.0e-3
+  energy: 5.0e-3
+  label_reconstruction: 1.0e-11
+  minimum_response: 1.0e-12
